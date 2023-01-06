@@ -1,0 +1,43 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": ["get", "post"]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    },
+    {
+      "type": "queue",
+      "direction": "out",
+      "name": "queue",
+      "queueName": "pending-books",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "cosmosDB",
+      "direction": "out",
+      "name": "saveDetails",
+      "databaseName": "books",
+      "collectionName": "bookData",
+      "createIfNotExists": false,
+      "connectionStringSetting": "manimbooksdata_DOCUMENTDB"
+    },
+    {
+      "type": "cosmosDB",
+      "direction": "in",
+      "name": "getBooks",
+      "databaseName": "books",
+      "collectionName": "bookData",
+      "connectionStringSetting": "manimbooksdata_DOCUMENTDB",
+      "partitionKey": "/id",
+      "sqlQuery": "SELECT * FROM books WHERE books.bookName = {book_title} AND books.author = {author}"
+    }
+  ]
+}
